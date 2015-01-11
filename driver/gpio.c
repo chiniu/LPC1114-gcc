@@ -25,7 +25,7 @@
 
 #if CONFIG_GPIO_DEFAULT_PIOINT0_IRQHANDLER==1
 volatile uint32_t gpio0_counter = 0;
-volatile uint32_t p0_1_counter  = 0;
+volatile uint32_t p0_2_counter  = 0;
 /*****************************************************************************
 ** Function name:		PIOINT0_IRQHandler
 **
@@ -43,7 +43,7 @@ void PIOINT0_IRQHandler(void)
   regVal = GPIOIntStatus( PORT0, 1 );
   if ( regVal )
   {
-	p0_1_counter++;
+	p0_2_counter++;
 	GPIOIntClear( PORT0, 1 );
   }		
   return;
@@ -405,6 +405,13 @@ void GPIOSetValue( uint32_t portNum, uint32_t bitPosi, uint32_t bitVal )
 {
   LPC_GPIO[portNum]->MASKED_ACCESS[(1<<bitPosi)] = (bitVal<<bitPosi);
 }
+
+uint32_t GPIOGetValue( uint32_t portNum, uint32_t bitPosi )
+{
+  return (LPC_GPIO[portNum]->MASKED_ACCESS[(1<<bitPosi)] >>bitPosi) & 0x1;
+}
+
+
 
 /*****************************************************************************
 ** Function name:		GPIOSetDir

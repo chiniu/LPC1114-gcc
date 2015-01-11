@@ -25,14 +25,8 @@
 #define CONFIG_ENABLE_DRIVER_SSP    1
 #define ENABLE_SSP_INTERRUPT        0
 
-/* reset pin */
-#define reset_port      1
-#define reset_pin       0
-
-/* data/command# pin */
-#define dc_port         2
-#define dc_pin          4
-
+#define LED_PORT                    0
+#define LED_Pin                     1
 
 //#define CONFIG_ENABLE_DRIVER_PRINTF                     1
 

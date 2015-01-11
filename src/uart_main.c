@@ -25,10 +25,12 @@
 
 extern volatile uint32_t UARTCount;
 extern volatile uint8_t UARTBuffer[BUFSIZE];
-
+extern volatile uint32_t p0_2_counter;
 
 int main (void) {
    int i;
+   uint32_t cnt = 0;
+   int led = 0; /* on state */
 	  /* Basic chip initialization is taken care of in SystemInit() called
 	   * from the startup code. SystemInit() and chip settings are defined
 	   * in the CMSIS system_<part family>.c file.
@@ -39,7 +41,25 @@ int main (void) {
   printf("LPC1114 init\n");
 
   GPIOInit();
-  GPIOSetValue(1, 11, 0);
+
+  LPC_IOCON->PIO0_1 = 0; 
+#if 0
+  GPIOSetDir(PORT0, 1, 1);
+  GPIOSetValue(PORT0, 1, led);
+  GPIOSetValue(PORT0, 1, 1);
+#else
+
+  GPIOSetDir(PORT0, 1, 0);
+#endif
+
+#if CONFIG_GPIO_DEFAULT_PIOINT0_IRQHANDLER==1
+  LPC_IOCON->PIO0_2 = 0; 
+  GPIOSetDir(PORT0, 1, 0);
+  GPIOSetInterrupt(PORT0, 1, 0, 0, 0);
+  GPIOIntEnable(PORT0, 1); 
+#else
+
+ #endif
 
 
 
@@ -52,7 +72,19 @@ int main (void) {
 	  UARTCount = 0;
 	  LPC_UART->IER = IER_THRE | IER_RLS | IER_RBR;	/* Re-enable RBR */
 	}
-  
+    
+#if CONFIG_GPIO_DEFAULT_PIOINT0_IRQHANDLER==1
+    if(cnt != p0_2_counter){
+   /*     led ^= led;
+        GPIOSetValue(PORT0, 1, led);
+*/
+        printf("=");
+        cnt = p0_2_counter;
+    }
+#else
+#endif
+    if (GPIOGetValue(PORT0, 1) != 1)
+      printf("-");
       
   }
 }
