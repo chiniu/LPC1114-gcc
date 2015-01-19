@@ -78,13 +78,11 @@ int main (void) {
    /*     led ^= led;
         GPIOSetValue(PORT0, 1, led);
 */
-        printf("=");
+        printf("%d\n", cnt);
         cnt = p0_2_counter;
     }
 #else
 #endif
-    if (GPIOGetValue(PORT0, 1) != 1)
-      printf("-");
       
   }
 }
